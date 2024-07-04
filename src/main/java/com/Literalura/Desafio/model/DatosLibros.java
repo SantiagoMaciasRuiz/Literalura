@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DatosLibros(
@@ -12,5 +13,16 @@ public record DatosLibros(
         @JsonAlias("languages")  List<String> idiomas,
         @JsonAlias("download_count") Double numeroDescargas
 ) {
-
+    @Override
+    public String toString() {
+        String nombresAutores = autor.stream()
+                .map(DatosAutor::nombre) // Asumiendo que DatosAutor tiene el método getNombre()
+                .collect(Collectors.joining(", "));
+        return "--- Libro ---\n" +
+                "Título: " + titulo + "\n" +
+                "Autor(es): " + nombresAutores + "\n" +
+                "Idiomas: " + idiomas + "\n" +
+                "Número de descargas: " + numeroDescargas;
+    }
 }
+

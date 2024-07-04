@@ -1,6 +1,18 @@
 package com.Literalura.Desafio.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Libros")
 public class Libro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    private Integer numeroDescargas;
+    @Column(unique = true)
+    private String titulo;
+    private String autores;
+    private String idiomas;
     public Integer getNumeroDescargas() {
         return numeroDescargas;
     }
@@ -33,8 +45,13 @@ public class Libro {
         this.idiomas = idiomas;
     }
 
-    private Integer numeroDescargas;
-    private String titulo;
-    private String autores;
-    private String idiomas;
-}
+    @Override
+    public String toString() {
+        return "--- Libro ---\n" +
+                "Título: " + titulo + "\n" +
+                "Autor(es): " + autores + "\n" +
+                "Idiomas: " + idiomas + "\n" +
+                "Número de descargas: " + numeroDescargas;
+        }
+    }
+
