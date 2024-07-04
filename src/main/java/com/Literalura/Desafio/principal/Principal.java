@@ -3,6 +3,7 @@ package com.Literalura.Desafio.principal;
 import com.Literalura.Desafio.model.Datos;
 import com.Literalura.Desafio.model.DatosLibros;
 import com.Literalura.Desafio.model.Libro;
+import com.Literalura.Desafio.repository.SerieRepository;
 import com.Literalura.Desafio.service.ConsumoAPI;
 import com.Literalura.Desafio.service.ConvierteDatos;
 
@@ -15,6 +16,7 @@ public class Principal {
     private final String URL_BASE = "https://gutendex.com/books/";
     private final String BUSQUEDA_API = "?search=";
     private ConvierteDatos conversor = new ConvierteDatos();
+    private SerieRepository repositorio;
     public void mostrarMenu() {
         var opcion = -1;
         while (opcion != 0) {
@@ -58,7 +60,7 @@ public class Principal {
                 .filter(e -> e.titulo().toUpperCase().contains(nombreLibro.toUpperCase()))
                 .findFirst();
         if(libroBuscado.isPresent()){
-
+            repositorio.save(datosLibros);
             System.out.println("---Libro encontrado---"
                     + "\n" + libroBuscado.get());
         }else {
