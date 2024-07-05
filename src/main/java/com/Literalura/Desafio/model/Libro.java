@@ -2,6 +2,8 @@ package com.Literalura.Desafio.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Libros")
 public class Libro {
@@ -11,6 +13,8 @@ public class Libro {
     private Integer numeroDescargas;
     @Column(unique = true)
     private String titulo;
+    @OneToMany(mappedBy = "libro" , cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<Autor> autor;
     private String autores;
     private String idiomas;
     public Integer getNumeroDescargas() {
@@ -51,7 +55,8 @@ public class Libro {
                 "Título: " + titulo + "\n" +
                 "Autor(es): " + autores + "\n" +
                 "Idiomas: " + idiomas + "\n" +
-                "Número de descargas: " + numeroDescargas;
+                "Número de descargas: " + numeroDescargas+ "\n"
+                + "___________________";
         }
     }
 
