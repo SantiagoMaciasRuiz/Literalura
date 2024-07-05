@@ -6,17 +6,26 @@ import com.Literalura.Desafio.model.Libro;
 import com.Literalura.Desafio.repository.SerieRepository;
 import com.Literalura.Desafio.service.ConsumoAPI;
 import com.Literalura.Desafio.service.ConvierteDatos;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
-
+@Component
 public class Principal {
+
     private Scanner teclado = new Scanner(System.in);
     private ConsumoAPI consumoAPI= new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/books/";
     private final String BUSQUEDA_API = "?search=";
     private ConvierteDatos conversor = new ConvierteDatos();
+
     private SerieRepository repositorio;
+    @Autowired
+    public Principal(SerieRepository repositorio) {
+        this.repositorio = repositorio;
+    }
     public void mostrarMenu() {
         var opcion = -1;
         while (opcion != 0) {
@@ -28,8 +37,14 @@ public class Principal {
                     0 - Salir
                     """;
             System.out.println(menu);
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            try {
+                opcion = teclado.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Por favor, ingrese un número válido.");
+                teclado.next(); // Limpiar el buffer
+                continue;
+            }
+            teclado.nextLine(); // Consumir el salto de línea
 
             switch (opcion) {
                 case 1:
@@ -55,16 +70,19 @@ public class Principal {
         System.out.println("Que libro deseas buscar?");
         var nombreLibro = teclado.nextLine();
         String json = consumoAPI.obtenerDatos(URL_BASE + BUSQUEDA_API + nombreLibro.replace(" ","%20"));
-        var datosLibros = conversor.obtenerDatos(json,Datos.class);
+        var datosLibros = conversor.obtenerDatos(json, Datos.class);
         Optional<DatosLibros> libroBuscado = datosLibros.resultados().stream()
                 .filter(e -> e.titulo().toUpperCase().contains(nombreLibro.toUpperCase()))
                 .findFirst();
-        if(libroBuscado.isPresent()){
-            repositorio.save(datosLibros);
+        if (libroBuscado.isPresent()) {
+            Libro libro = conversor.convertirDatosLibrosALibro(libroBuscado.get());
+            repositorio.save(libro);
             System.out.println("---Libro encontrado---"
-                    + "\n" + libroBuscado.get());
-        }else {
-            System.out.println("episodio no encontrado");
+                    + "\n" + libro.toString());
+
+
+        } else {
+            System.out.println("Libro no encontrado");
         }
     }
 }

@@ -10,12 +10,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DesafioApplication implements CommandLineRunner {
 
-
+	private final Principal principal;
+	@Autowired
+	public DesafioApplication(Principal principal) {
+		this.principal = principal;
+	}
 	public static void main(String[] args) {
 		SpringApplication.run(DesafioApplication.class, args);
 	}
 	public void run(String... args) throws Exception {
-		Principal principal= new Principal();
 		principal.mostrarMenu();
 
 
