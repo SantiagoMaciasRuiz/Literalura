@@ -1,7 +1,5 @@
 package com.Literalura.Desafio.service;
 
-import com.Literalura.Desafio.model.Autor;
-import com.Literalura.Desafio.model.DatosAutor;
 import com.Literalura.Desafio.model.DatosLibros;
 import com.Literalura.Desafio.model.Libro;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,13 +30,4 @@ public class ConvierteDatos implements IConvierteDatos {
         libro.setNumeroDescargas(datosLibros.numeroDescargas().intValue());
         return libro;
     }
-    @Autowired
-    public Autor convertirDatosAutorAAutor(DatosAutor datosAutor) {
-        Autor autor = new Autor();
-        autor.setNombre(datosAutor.nombre());
-        autor.setFechaDeNacimiento(datosAutor.fechaDeNacimiento());
-        autor.setFechaDeMuerte(datosAutor.fechaDeMuerte());
-        autor.setLibro();
-    }
-
 }
