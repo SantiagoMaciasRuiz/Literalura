@@ -1,10 +1,6 @@
 package com.Literalura.Desafio.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "Autor")
@@ -12,13 +8,14 @@ public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)
+    private Long id;
     private String nombre;
-
+    private Integer fechaDeNacimiento;
+    private Integer fechaDeMuerte;
     @ManyToOne
     @JoinColumn(name = "Libros_id")
     private Libro libro;
-    private Integer fechaDeNacimiento;
-    private Integer fechaDeMuerte;
+
 
 
 
@@ -58,8 +55,8 @@ public class Autor {
     @Override
     public String toString() {
         return "Autor:" + nombre + '\n' +
-                "Fecha De Nacimiento:"+ fechaDeNacimiento +
-                "Fecha De Muerte:" + fechaDeMuerte +
-                "libros:" + libro;
+                "Fecha De Nacimiento:"+ fechaDeNacimiento +"\n" +
+                "Fecha De Muerte:" + fechaDeMuerte + "\n" +
+                "libros:" + libro.getTitulo();
     }
 }

@@ -1,12 +1,12 @@
 package com.Literalura.Desafio.principal;
 
-import com.Literalura.Desafio.model.Datos;
-import com.Literalura.Desafio.model.DatosLibros;
-import com.Literalura.Desafio.model.Libro;
+import com.Literalura.Desafio.model.*;
 import com.Literalura.Desafio.repository.libroRepository;
 import com.Literalura.Desafio.service.ConsumoAPI;
 import com.Literalura.Desafio.service.ConvierteDatos;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -74,21 +74,28 @@ public class Principal {
                 .filter(e -> e.titulo().toUpperCase().contains(nombreLibro.toUpperCase()))
                 .findFirst();
         if (libroBuscado.isPresent()) {
-            Libro libro = conversor.convertirDatosLibrosALibro(libroBuscado.get());
-            repositorio.save(libro);
-            System.out.println("---Libro encontrado---"
-                    + "\n" + libro.toString());
+            try {
+                // Convertir DatosLibros a Libro
+                Libro libro = conversor.convertirDatosLibrosALibro(libroBuscado.get());
 
-
+                // Guardar libro y autores
+                repositorio.save(libro);
+                System.out.println("---Libro encontrado---\n" + libro.toString());
+            } catch (DataIntegrityViolationException e) {
+                System.out.println("El libro ya se encuentra en la base de datos");
+            }
         } else {
             System.out.println("Libro no encontrado");
         }
     }
+
     private void mostrarSeriesBuscadas() {
         libros = repositorio.findAll();
-
-        libros.stream()
-                .sorted(Comparator.comparing(Libro::getTitulo))
-                .forEach(System.out::println);
+        if (libros.isEmpty()) {
+            System.out.println("No se han buscado libros.");
+        } else {
+            libros.stream().sorted(Comparator.comparing(Libro::getTitulo))
+                    .forEach(System.out::println);
+        }
     }
 }

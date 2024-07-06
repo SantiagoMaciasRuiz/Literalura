@@ -2,7 +2,9 @@ package com.Literalura.Desafio.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Libros")
@@ -13,9 +15,8 @@ public class Libro {
     private Integer numeroDescargas;
     @Column(unique = true)
     private String titulo;
-    @OneToMany(mappedBy = "libro" , cascade = CascadeType.ALL, orphanRemoval = true )
-    private List<Autor> autor;
-    private String autores;
+    @OneToMany(mappedBy = "libro" , cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    private List<Autor> autores = new ArrayList<>();
     private String idiomas;
     public Integer getNumeroDescargas() {
         return numeroDescargas;
@@ -33,11 +34,19 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutores() {
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public List<Autor> getAutores() {
         return autores;
     }
 
-    public void setAutores(String autores) {
+    public void setAutores(List<Autor> autores) {
         this.autores = autores;
     }
 
@@ -53,7 +62,9 @@ public class Libro {
     public String toString() {
         return "--- Libro ---\n" +
                 "Título: " + titulo + "\n" +
-                "Autor(es): " + autores + "\n" +
+                "Autor(es): " + autores.stream()
+                .map(autor -> autor.getNombre())
+                .collect(Collectors.joining(", ")) + "\n" +
                 "Idiomas: " + idiomas + "\n" +
                 "Número de descargas: " + numeroDescargas+ "\n"
                 + "___________________";
