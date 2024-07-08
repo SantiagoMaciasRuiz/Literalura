@@ -1,10 +1,10 @@
 package com.Literalura.Desafio.principal;
 
 import com.Literalura.Desafio.model.*;
+import com.Literalura.Desafio.repository.autorRepository;
 import com.Literalura.Desafio.repository.libroRepository;
 import com.Literalura.Desafio.service.ConsumoAPI;
 import com.Literalura.Desafio.service.ConvierteDatos;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
@@ -21,17 +21,19 @@ public class Principal {
     private ConvierteDatos conversor = new ConvierteDatos();
     private List<Libro> libros;
     private libroRepository repositorio;
+    private autorRepository repositorioAutor;
     @Autowired
-    public Principal(libroRepository repositorio) {
+    public Principal(libroRepository repositorio,autorRepository  repositorioAutor) {
         this.repositorio = repositorio;
+        this.repositorioAutor = repositorioAutor;
     }
     public void mostrarMenu() {
         var opcion = -1;
         while (opcion != 0) {
             var menu = """
-                    1 - Buscar series 
-                    2 - Buscar episodios
-                    3 - Mostrar series buscadas
+                    1 -Buscar Libro
+                    2 -Lista e busquedas
+                    3 -lista de autores buscados por libro
                                   
                     0 - Salir
                     """;
@@ -53,7 +55,7 @@ public class Principal {
                     mostrarSeriesBuscadas();
                     break;
                 case 3:
-
+                    mostrarAutores();
                     break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -97,5 +99,11 @@ public class Principal {
             libros.stream().sorted(Comparator.comparing(Libro::getTitulo))
                     .forEach(System.out::println);
         }
+    }
+    private void mostrarAutores() {
+        List<Autor> autores = repositorioAutor.findAll();
+            autores.stream().sorted(Comparator.comparing(Autor::getNombre)).distinct()
+                    .forEach(System.out::println);
+
     }
 }

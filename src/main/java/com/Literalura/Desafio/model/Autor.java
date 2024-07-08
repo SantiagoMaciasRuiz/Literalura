@@ -2,6 +2,10 @@ package com.Literalura.Desafio.model;
 
 import jakarta.persistence.*;
 
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.joining;
+
 @Entity
 @Table(name = "Autor")
 public class Autor {
@@ -54,9 +58,15 @@ public class Autor {
 
     @Override
     public String toString() {
-        return "Autor:" + nombre + '\n' +
+
+        return "--------------------------------------"+ '\n'+
+                "Autor:" + nombre + '\n' +
                 "Fecha De Nacimiento:"+ fechaDeNacimiento +"\n" +
                 "Fecha De Muerte:" + fechaDeMuerte + "\n" +
-                "libros:" + libro.getTitulo();
+                "libros:" + libro.getAutores().stream()
+                .map(autor -> libro.getTitulo())
+                .distinct().toList()
+                + "\n"
+                +"--------------------------------------" ;
     }
 }

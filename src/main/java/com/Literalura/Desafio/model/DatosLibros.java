@@ -10,7 +10,7 @@ public record DatosLibros(
         @JsonAlias("title") String titulo,
         @JsonAlias("authors") List<DatosAutor> autores,
         @JsonAlias("languages")  List<String> idiomas,
-        @JsonAlias("download_count") Double numeroDescargas
+        @JsonAlias("download_count") Integer numeroDescargas
 ) {
     @Override
     public String titulo() {
@@ -29,7 +29,7 @@ public record DatosLibros(
     }
 
     @Override
-    public Double numeroDescargas() {
+    public Integer numeroDescargas() {
         return numeroDescargas;
     }
 }
