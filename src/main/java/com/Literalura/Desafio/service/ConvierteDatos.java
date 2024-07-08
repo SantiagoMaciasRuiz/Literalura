@@ -26,7 +26,7 @@ public class ConvierteDatos implements IConvierteDatos {
         Libro libro = new Libro();
         libro.setTitulo(datosLibros.titulo());
         libro.setIdiomas(String.join(", ", datosLibros.idiomas()));
-        libro.setNumeroDescargas(datosLibros.numeroDescargas().intValue());
+        libro.setNumeroDescargas(datosLibros.numeroDescargas());
 
         // Crear y asociar autores
         List<Autor> autores = datosLibros.autores().stream().map(datosAutor -> {
