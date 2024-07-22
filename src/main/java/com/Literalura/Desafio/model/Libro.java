@@ -2,6 +2,10 @@ package com.Literalura.Desafio.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name = "Libros")
 public class Libro {
@@ -11,7 +15,9 @@ public class Libro {
     private Integer numeroDescargas;
     @Column(unique = true)
     private String titulo;
-    private String autores;
+    @ManyToOne
+    @JoinColumn(name = "autor_id", nullable = false)
+    private Autor autor;
     private String idiomas;
     public Integer getNumeroDescargas() {
         return numeroDescargas;
@@ -29,12 +35,20 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutores() {
-        return autores;
+    public Long getId() {
+        return Id;
     }
 
-    public void setAutores(String autores) {
-        this.autores = autores;
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
     public String getIdiomas() {
@@ -49,9 +63,13 @@ public class Libro {
     public String toString() {
         return "--- Libro ---\n" +
                 "Título: " + titulo + "\n" +
-                "Autor(es): " + autores + "\n" +
+                "Autor(es): " + autor.getNombre() + "\n" +
                 "Idiomas: " + idiomas + "\n" +
-                "Número de descargas: " + numeroDescargas;
+                "Número de descargas: " + numeroDescargas + "\n"
+                +"==================";
         }
+
+    public void setAutor() {
     }
+}
 

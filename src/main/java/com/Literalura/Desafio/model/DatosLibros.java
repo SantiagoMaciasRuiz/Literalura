@@ -11,8 +11,27 @@ public record DatosLibros(
         @JsonAlias("title") String titulo,
         @JsonAlias("authors") List<DatosAutor> autor,
         @JsonAlias("languages")  List<String> idiomas,
-        @JsonAlias("download_count") Double numeroDescargas
+        @JsonAlias("download_count") Integer numeroDescargas
 ) {
 
+    @Override
+    public String titulo() {
+        return titulo;
+    }
+
+    @Override
+    public List<DatosAutor> autor() {
+        return autor;
+    }
+
+    @Override
+    public List<String> idiomas() {
+        return idiomas;
+    }
+
+    @Override
+    public Integer numeroDescargas() {
+        return numeroDescargas;
+    }
 }
 
