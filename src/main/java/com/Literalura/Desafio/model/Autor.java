@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Autor")
@@ -57,6 +58,14 @@ public class Autor {
 
     public void setLibros(Set<Libro> libros) {
         this.libros = libros;
+    }
+
+    @Override
+    public String toString() {
+        return  "nombre='" + nombre + '\'' +
+                "fechaDeNacimiento=" + fechaDeNacimiento +
+                "fechaDeMuerte=" + fechaDeMuerte + "\n"+
+                "libros=" + libros.stream().map(Libro::getTitulo).toList();
     }
 }
 

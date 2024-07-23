@@ -57,6 +57,7 @@ public class Principal {
                 case 1 -> buscarLibroPorLibro();
                 case 2 -> ListarLibrosBuscados();
                 case 3 -> ListarAutorPorLibro();
+                case 4 -> autoresVivosFecha();
                 case 0 -> System.out.println("Cerrando la aplicación...");
                 default -> System.out.println("Opción inválida");
             }
@@ -131,5 +132,14 @@ public class Principal {
                 listaAutores.clear();
             }
         }
+    }
+    @Transactional
+    public void autoresVivosFecha(){
+        System.out.println("Ingresa La fecha de nacimiento y La fecha de muerte sobre el autor:");
+        int fechaDeNacimiento = teclado.nextInt();
+        int fechaDeMuerte = teclado.nextInt();
+        List<Autor> autores = repositorioAutor.AutoresVivosEnDeterminadaFecha(fechaDeNacimiento,fechaDeMuerte);
+        System.out.println(autores.toString());
+
     }
 }
