@@ -53,4 +53,11 @@ public class ConvierteDatos implements IConvierteDatos {
         libro.setNumeroDescargas(datosLibros.numeroDescargas());
         return libro;
     }
+    public String formatearAutor(Autor autor) {
+        // Formatear según  necesidades
+        return "Autor: " + autor.getNombre() +
+                "\nFecha de Nacimiento: " + autor.getFechaDeNacimiento() +
+                "\nFecha de Muerte: " + autor.getFechaDeMuerte() +
+                "\n" + "Libros:" + autor.getLibros().stream().map(Libro::getTitulo).toList();
+    }
 }

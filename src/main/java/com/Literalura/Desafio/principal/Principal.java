@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class Principal {
@@ -40,7 +41,10 @@ public class Principal {
                     1 - Buscar Libros 
                     2 - Listar Libros buscados
                     3 - Listar Libros por autores
-                                  
+                    4 - Listar Segun Año de Muerte y Nacimiento            
+                    ==========================================
+                    Estadisticas:
+                    5 - Mostrar Estadisticas de la Base de Datos  
                     0 - Salir
                     """;
             System.out.println(menu);
@@ -58,6 +62,7 @@ public class Principal {
                 case 2 -> ListarLibrosBuscados();
                 case 3 -> ListarAutorPorLibro();
                 case 4 -> autoresVivosFecha();
+                case 5 -> EstadisticasLibros();
                 case 0 -> System.out.println("Cerrando la aplicación...");
                 default -> System.out.println("Opción inválida");
             }
@@ -122,7 +127,7 @@ public class Principal {
             Set<Libro> libros = autor.getLibros();
 
             if (libros.isEmpty()) {
-                System.out.println("No hay libros para este autor.");
+                System.out.println("No hay libros para librose autor.");
             } else {
                 System.out.println("Libros:");
                 for (Libro libro : libros) {
@@ -135,11 +140,23 @@ public class Principal {
     }
     @Transactional
     public void autoresVivosFecha(){
-        System.out.println("Ingresa La fecha de nacimiento y La fecha de muerte sobre el autor:");
+        System.out.println("Ingresa La fecha inicial de nacimiento:");
         int fechaDeNacimiento = teclado.nextInt();
+        System.out.println("La fecha de muerte sobre el autor:");
         int fechaDeMuerte = teclado.nextInt();
-        List<Autor> autores = repositorioAutor.AutoresVivosEnDeterminadaFecha(fechaDeNacimiento,fechaDeMuerte);
-        System.out.println(autores.toString());
-
+        List<Autor> autores = repositorioAutor.findByFechaDeNacimientoGreaterThanEqualAndFechaDeMuerteLessThanEqual(fechaDeNacimiento,fechaDeMuerte);
+        for (Autor autor : autores) {
+            System.out.println(conversor.formatearAutor(autor));
+        }
+    }
+    @Transactional
+    public void EstadisticasLibros() {
+        List<Libro> libros = libroRepository.findAll();
+        IntSummaryStatistics stats =  libros.stream().collect(Collectors.summarizingInt(Libro::getNumeroDescargas));
+        System.out.println("Media:" + stats.getAverage() +
+                "\nNumero mayor de descargas:" + stats.getMax() +
+                "\nNumero menor de descargas:" + stats.getMin() +
+                "\nCantidad de registros:" + stats.getCount()
+        + "\n====================================================");
     }
 }
